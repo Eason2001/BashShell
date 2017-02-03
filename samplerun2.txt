@@ -1,0 +1,240 @@
+Script started on Tue Jan 24 20:44:26 2017
+[?1034h[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat fibonacci.sh 
+#!/bin/bash
+
+# This script is going to calculate the Fibonacci numbers according to the index
+# given by end users.
+
+#Zhicheng Pan, 104639463
+
+#The fibonacci sequence is like below:
+# 0,   1, 1, 2, 3, 5,    8, 13, 21, 34, 55,   89, 144, 233，377，610， 
+#    987，1597，2584，4181，6765，  10946，17711，28657，46368
+function fibonacci() 
+{
+    #fiboIndex is also a global integer variable
+    declare -i fiboIndex 
+            fiboIndex=$1      
+          
+#Both fiboIndex=0 and fiboIndex=1 are the return points of recursion.
+#it has to reach these two return points, then the recursion can return and 
+#fibonacci() can finally complete.
+    if [[ fiboIndex -eq 0 ]]; then
+            #echo $fiboIndex
+            fiboNumber=fiboNumber+$fiboIndex
+            
+
+    elif [[ fiboIndex -eq 1 ]]; then
+            #echo $fiboIndex
+            fiboNumber=fiboNumber+$fiboIndex
+            
+    else
+            #converting the string value "x" into integer value:  $((x)) 
+            #echo $(($fiboIndex-1))
+            fibonacci $(($fiboIndex-1)) 
+            #echo $(($fiboIndex-2))
+            fibonacci $(($fiboIndex-2))
+                       
+      fi  
+    
+}
+
+
+
+#The script starts from here:
+
+    #Defining a global variable to caculate the fibonacci number
+	declare -i fiboNumber=0
+
+    #[[ Comparing Expression ]]: -ne, -ge, -gt... for mathamatic comparing;
+    # ==, !=, >, < ...for string comparing
+    #filter out the invalid inputs: 
+    if [[ $# -ne 1 ]]; then  
+        #statements
+        echo "Please refer to the usage:"
+        echo "usage: fibonacci < integer >"
+        exit 1
+    #the input must be an integer, and it must be greater than or equal to ZERO.
+    elif [[ $1 =~ ^-?[1-9][0-9]*$ || $1 =~ ^0$ ]] && [[ $1 -ge 0 ]]; then
+        #invoking the fibonacci function to calculate the fibonacci number
+        
+        fibonacci $1
+
+        #Both $variable and ${variable} are to get the value from a variable
+        #Printing out the caculating result
+        echo "-----------------------------------------------------------------------"
+        echo "The $1th fibonacci number is: " $fiboNumber        
+
+    else
+
+        echo "Your input has to be an integer number, and it must be greater than or equal to ZERO as well!"
+        echo "Please try it again."
+        exit 1
+        
+
+    fi
+
+
+
+
+
+
+
+
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat minimize.sh 
+#!/bin/bash
+
+# This script is going to compress files, in the current directory, with some extensions.
+# Example: minimize doc jpg txt
+
+#Zhicheng Pan, 104639463
+
+
+
+#The script starts from here:
+
+    #Defining a global variable to count the number of files
+	declare -i fCount
+
+    #filter out the invalid inputs: 
+    if [[ $# -eq 0 ]]; then
+        echo "Please refer to the usage:"
+        echo "usage: ./minimize.sh < extension list >"
+        exit 1
+
+    else
+
+        fCount=0
+        for arg in "$@"; do
+
+            echo "-----------------------------------------------------------------------"
+            echo "For files with extension: "$arg
+            #to obtain the number of files with this extension
+            fCount=$(find . -type f -maxdepth 1 -name "*.$arg" |wc -l)
+
+            #If there is not any file with this kind of extension, printing out the excution result
+            if [[ fCount -eq 0 ]]; then
+            
+                echo "There is not any file with extension: "$arg", compression will be ignored."
+                echo "-----------------------------------------------------------------------"
+            #Or else, create the compressed package, printing out the excution result    
+            else
+                tar -czvf  $arg.tar.gz  ./*.$arg
+                echo  "The compressed package, $arg.tar.gz, has been created successfully,"
+                echo  "and it contains $fCount files with $arg extension."
+                echo "-----------------------------------------------------------------------"
+            fi
+            
+        done
+        
+
+    fi
+
+
+
+
+
+
+
+
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fin[Ko[Kbonacci.sh [K
+Please refer to the usage:
+usage: fibonacci < integer >
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh jj
+Your input has to be an integer number, and it must be greater than or equal to ZERO as well!
+Please try it again.
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh jj kk ll
+Please refer to the usage:
+usage: fibonacci < integer >
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh jj kk ll[K[K[K[K[K[K[K[K-10
+Your input has to be an integer number, and it must be greater than or equal to ZERO as well!
+Please try it again.
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh -10[K[K30
+Your input has to be an integer number, and it must be greater than or equal to ZERO as well!
+Please try it again.
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh -30[K[K[K0
+-----------------------------------------------------------------------
+The 0th fibonacci number is:  0
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh 0[K1
+-----------------------------------------------------------------------
+The 1th fibonacci number is:  1
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh 1[K2
+-----------------------------------------------------------------------
+The 2th fibonacci number is:  1
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh 2[K3
+-----------------------------------------------------------------------
+The 3th fibonacci number is:  2
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh 3[K10
+-----------------------------------------------------------------------
+The 10th fibonacci number is:  55
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./fibonacci.sh 10[K[K20
+-----------------------------------------------------------------------
+The 20th fibonacci number is:  6765
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./minimize.sh ss[K[K[K
+Please refer to the usage:
+usage: ./minimize.sh < extension list >
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./minimize.sh jj kk ll [K[K[K[K[K[Kjpe[Kg do[Koc
+-----------------------------------------------------------------------
+For files with extension: jj
+There is not any file with extension: jj, compression will be ignored.
+-----------------------------------------------------------------------
+-----------------------------------------------------------------------
+For files with extension: jpg
+There is not any file with extension: jpg, compression will be ignored.
+-----------------------------------------------------------------------
+-----------------------------------------------------------------------
+For files with extension: doc
+There is not any file with extension: doc, compression will be ignored.
+-----------------------------------------------------------------------
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./minimize.sh jj jpg doc[K[K[K[K[K[K[K[K[K[Ksh txt docx
+-----------------------------------------------------------------------
+For files with extension: sh
+a ./createTestFiles.sh
+a ./fibonacci.sh
+a ./listfd.sh
+a ./listfs.sh
+a ./minimize.sh
+a ./replaceWord.sh
+a ./test.sh
+The compressed package, sh.tar.gz, has been created successfully,
+and it contains 7 files with sh extension.
+-----------------------------------------------------------------------
+-----------------------------------------------------------------------
+For files with extension: txt
+a ./Terminal Saved Output.txt
+a ./new.txt
+a ./samplerun2.txt
+The compressed package, txt.tar.gz, has been created successfully,
+and it contains 3 files with txt extension.
+-----------------------------------------------------------------------
+-----------------------------------------------------------------------
+For files with extension: docx
+There is not any file with extension: docx, compression will be ignored.
+-----------------------------------------------------------------------
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ls -l sh.tar.gz txt.tar.gz 
+-rw-r--r--  1 Kevin  staff  3114 Jan 24 20:48 sh.tar.gz
+-rw-r--r--  1 Kevin  staff  2467 Jan 24 20:48 txt.tar.gz
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m date 
+Tue Jan 24 20:49:13 EST 2017
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ls -l
+total 128
+drwxr-xr-x  13 Kevin  staff   442 Jan 22 16:25 [34mDD[39;49m[0m
+-rw-r--r--@  1 Kevin  staff  1028 Jan 15 21:37 Terminal Saved Output.txt
+-rwxr-xr-x   1 Kevin  staff   683 Jan 17 11:10 [31mcreateTestFiles.sh[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff  2339 Jan 24 10:12 [31mfibonacci.sh[39;49m[0m
+-rw-r--r--   1 Kevin  staff   772 Jan 24 18:13 fileHelp
+-rwxr-xr-x   1 Kevin  staff  1365 Jan 24 17:36 [31mlistfd.sh[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff  2385 Jan 24 10:37 [31mlistfd.sh.bak[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff  1485 Jan 24 11:07 [31mlistfs.sh[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff  1616 Jan 24 19:15 [31mminimize.sh[39;49m[0m
+-rw-r--r--   1 Kevin  staff  1028 Jan 24 18:20 new.txt
+-rwxr-xr-x   1 Kevin  staff  1751 Jan 24 18:58 [31mreplaceWord.sh[39;49m[0m
+-rw-r--r--   1 Kevin  staff  8935 Jan 24 20:49 samplerun2.txt
+-rw-r--r--   1 Kevin  staff  3114 Jan 24 20:48 sh.tar.gz
+-rwxr-xr-x   1 Kevin  staff  1260 Jan 16 22:44 [31mtest.sh[39;49m[0m
+drwxr-xr-x   7 Kevin  staff   238 Jan 17 11:04 [34mttdir[39;49m[0m
+-rw-r--r--   1 Kevin  staff  2467 Jan 24 20:48 txt.tar.gz
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m exit
+exit
+
+Script done on Tue Jan 24 20:49:43 2017

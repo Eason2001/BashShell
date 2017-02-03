@@ -1,0 +1,720 @@
+Script started on Tue Jan 24 21:43:25 2017
+[?1034h[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat listfd.sh
+#!/bin/bash
+
+# This script is going to list the names of directories and files separately, 
+# and display the total number of directories and files.
+
+#Zhicheng Pan, 104639463
+
+
+#The script starts from here:
+
+    #defining variables to count the number of directories and files
+    declare -i dCount=0
+	declare -i fCount=0
+
+if [[ $# -ne 1 ]]; then
+        echo "Please refer to the usage:"
+        echo "usage: ./listfd.sh <directory_name>"
+        exit 1
+
+#if end user's input is not a directory, tips will be shown to them.
+elif test -f $1
+then
+    echo "You input a file name but not a directory, pls reinput and try again!"
+    exit 1
+
+#String comparing
+elif [[ $1 == "/" ]]
+then
+     echo "Listing the / directory takes too much time, pls input another directory"
+     exit 1
+
+#if end user's input is a directory, the listing process will start
+elif test -d $1
+then
+    #using ls command to list names of directories and files, counting the number
+    ls -Rl $1
+    dCount=$(ls -Rl $1|grep "^d"|wc -l)
+    fCount=$(ls -Rl $1|grep "^-"|wc -l)
+
+    #printing out the caculating result
+    echo "-----------------------------------------------------------------------"
+    echo "The total number of directories is: " ${dCount}
+    echo "The total number of files is: " ${fCount}
+
+else
+    echo "The directory doesn't exist, pls input a new one!"
+    exit 1
+fi
+
+
+
+
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat listfs.sh 
+#!/bin/bash
+
+# This script is going to list all regular files in the current directory that 
+# are smaller than n bytes (n is an integer argument).
+
+#Zhicheng Pan, 104639463
+
+#The script starts from here:
+
+#defing a variable to count the number of files that are smaller than n bytes
+declare -i fCount=0
+
+if [[ $# -ne 2 ]]; then
+        echo "Please refer to the usage:"
+        echo "usage: ./listfs.sh <directory_name> <n bytes>"
+        exit 1
+
+#if end user's input is not a directory, tips will be shown to them.
+elif test -f $1
+then
+    echo "You input a file name but not a directory, pls reinput and try again!"
+    exit 1
+
+#if end user's input is a directory, the finding process will start
+elif test -d $1
+then
+    #The n must be an integer and equal to or greater than ZERO
+    if [[ $2 =~ ^-?[1-9][0-9]*$ || $2 =~ ^0$ ]] && [[ $2 -ge 0 ]]; then
+    
+        #using find command to look for files, wc command to count the number
+        find $1 -type f -size -$2c
+        fCount=$(find $1 -type f -size -$2c|wc -l)
+
+        #echo -e "\n"
+        #printing out the caculating result
+        echo "-----------------------------------------------------------------------"
+        echo "The total number of files that are smaller than "$2 "bytes is: " ${fCount}
+
+    else
+
+        echo "The n must be an integer and equal to or greater than ZERO, pls input a new one!"
+        exit 1    
+
+
+    fi
+
+else
+    echo "The directory doesn't exist, pls input a new one!"
+    exit 1
+fi
+
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat replaceWord.sh 
+#!/bin/bash
+
+# This script is going to replace all occurrences of a word by using another word,  
+# and store the new text in a target file.
+
+#Zhicheng Pan, 104639463
+
+#The script starts from here:
+
+#defining an integer variable to count the number of words replaced 
+declare -i repCount=0
+declare -i textTrue=0
+
+if [[ $# -ne 4 ]]; then
+        echo "Please refer to the usage:"
+        echo "usage: ./replaceWord.sh <inFile> <word> <repWord> <outFile>"
+        exit 1
+
+#if end user's input is not a file, tips will be shown to them.
+elif test -d $1
+then
+    echo "You input a directory but not a file, pls reinput and try again!"
+    exit 1
+
+#if end user's input is a real text file, the replacing process will start
+elif test -f $1
+then
+    #if textTrue=0, it is not a real text file
+    textTrue=$(file $1 |grep -i "text" |wc -l)
+    
+    if [[ textTrue -eq 0 ]]; then
+
+        echo "The file you input is not a text file, pls reinput and try again!"
+        exit 1    
+
+    else
+
+        #only printing out the words which will be replaced: -n
+        sed -n "s/$2/$3/gp" $1  
+
+        #caculating the number of words that will be replaced
+        repCount=$(sed -n "s/$2/$3/gp" $1|wc -l)  
+
+        #replacing the words and store the new text to a target file
+        sed "s/$2/$3/g" $1 > $4
+    
+        #printing out the caculating result
+        echo "-----------------------------------------------------------------------"
+        echo "The number of words that have been replaced is: "${repCount}
+        echo "The new file with replaced words:"
+        echo $(pwd $4)/$4
+
+    fi
+
+
+#if end user's input is not a file, tips will be shown to them.
+else
+    echo "The file is not text file or doesn't exist, pls input a new one!"
+    exit 1
+fi[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh
+Please refer to the usage:
+usage: ./listfd.sh <directory_name>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh jj
+The directory doesn't exist, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh jj kk ;[Kll
+Please refer to the usage:
+usage: ./listfd.sh <directory_name>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh jj kk ll[K[K[K[K[K[K[K[Ktest.sh 
+You input a file name but not a directory, pls reinput and try again!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh test.sh [K[K[K[K[K[K[K[K/
+Listing the / directory takes too much time, pls input another directory
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh /
+Listing the / directory takes too much time, pls input another directory
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh /[Kdafsdf
+The directory doesn't exist, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh dafsdf[K[K[K[K[K[K.
+total 144
+drwxr-xr-x  13 Kevin  staff    442 Jan 22 16:25 [34mDD[39;49m[0m
+-rw-r--r--@  1 Kevin  staff   1028 Jan 15 21:37 Terminal Saved Output.txt
+-rwxr-xr-x   1 Kevin  staff    683 Jan 17 11:10 [31mcreateTestFiles.sh[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff   2339 Jan 24 10:12 [31mfibonacci.sh[39;49m[0m
+-rw-r--r--   1 Kevin  staff    772 Jan 24 18:13 fileHelp
+-rwxr-xr-x   1 Kevin  staff   1365 Jan 24 17:36 [31mlistfd.sh[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff   2385 Jan 24 10:37 [31mlistfd.sh.bak[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff   1485 Jan 24 11:07 [31mlistfs.sh[39;49m[0m
+-rwxr-xr-x   1 Kevin  staff   1616 Jan 24 19:15 [31mminimize.sh[39;49m[0m
+-rw-r--r--   1 Kevin  staff   1028 Jan 24 18:20 new.txt
+-rwxr-xr-x   1 Kevin  staff   1751 Jan 24 18:58 [31mreplaceWord.sh[39;49m[0m
+-rw-r--r--   1 Kevin  staff   6210 Jan 24 21:45 samplerun1.txt
+-rw-r--r--   1 Kevin  staff  10193 Jan 24 20:49 samplerun2.txt
+-rw-r--r--   1 Kevin  staff   3114 Jan 24 20:48 sh.tar.gz
+-rwxr-xr-x   1 Kevin  staff   1011 Jan 24 21:42 [31mtest.sh[39;49m[0m
+drwxr-xr-x   7 Kevin  staff    238 Jan 17 11:04 [34mttdir[39;49m[0m
+-rw-r--r--   1 Kevin  staff   2467 Jan 24 20:48 txt.tar.gz
+
+./DD:
+total 16
+-rw-r--r--@ 1 Kevin  staff  1028 Jan 15 21:37 Terminal Saved Output.txt
+-rwxr-xr-x  1 Kevin  staff  2102 Jan 17 21:38 [31mlistfd.sh[39;49m[0m
+-rw-r--r--  1 Kevin  staff     0 Jan 15 21:00 test1
+-rw-r--r--  1 Kevin  staff     0 Jan 15 21:00 test2
+-rw-r--r--  1 Kevin  staff     0 Jan 15 21:00 test3
+drwxr-xr-x  8 Kevin  staff   272 Jan 22 16:26 [34mtestedDir1[39;49m[0m
+drwxr-xr-x  7 Kevin  staff   238 Jan 15 20:53 [34mtestedDir2[39;49m[0m
+drwxr-xr-x  7 Kevin  staff   238 Jan 15 20:53 [34mtestedDir3[39;49m[0m
+drwxr-xr-x  7 Kevin  staff   238 Jan 15 20:53 [34mtestedDir4[39;49m[0m
+drwxr-xr-x  8 Kevin  staff   272 Jan 15 21:03 [34mtestedDir5[39;49m[0m
+
+./DD/testedDir1:
+total 8
+-rwxr-xr-x  1 Kevin  staff  2102 Jan 17 21:38 [31mlistfd.sh[39;49m[0m
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile5
+
+./DD/testedDir2:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+./DD/testedDir3:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+./DD/testedDir4:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+./DD/testedDir5:
+total 0
+drwxr-xr-x  7 Kevin  staff  238 Jan 15 20:53 [34mtestedDir6[39;49m[0m
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile5
+
+./DD/testedDir5/testedDir6:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+./ttdir:
+total 0
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir1[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir2[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir3[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir4[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir5[39;49m[0m
+
+./ttdir/testedDir1:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+./ttdir/testedDir2:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+./ttdir/testedDir3:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+./ttdir/testedDir4:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+./ttdir/testedDir5:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+-----------------------------------------------------------------------
+The total number of directories is:  13
+The total number of files is:  76
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh .[Kdd[K[KDD/
+total 16
+-rw-r--r--@ 1 Kevin  staff  1028 Jan 15 21:37 Terminal Saved Output.txt
+-rwxr-xr-x  1 Kevin  staff  2102 Jan 17 21:38 [31mlistfd.sh[39;49m[0m
+-rw-r--r--  1 Kevin  staff     0 Jan 15 21:00 test1
+-rw-r--r--  1 Kevin  staff     0 Jan 15 21:00 test2
+-rw-r--r--  1 Kevin  staff     0 Jan 15 21:00 test3
+drwxr-xr-x  8 Kevin  staff   272 Jan 22 16:26 [34mtestedDir1[39;49m[0m
+drwxr-xr-x  7 Kevin  staff   238 Jan 15 20:53 [34mtestedDir2[39;49m[0m
+drwxr-xr-x  7 Kevin  staff   238 Jan 15 20:53 [34mtestedDir3[39;49m[0m
+drwxr-xr-x  7 Kevin  staff   238 Jan 15 20:53 [34mtestedDir4[39;49m[0m
+drwxr-xr-x  8 Kevin  staff   272 Jan 15 21:03 [34mtestedDir5[39;49m[0m
+
+DD//testedDir1:
+total 8
+-rwxr-xr-x  1 Kevin  staff  2102 Jan 17 21:38 [31mlistfd.sh[39;49m[0m
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff     0 Jan 15 20:53 testedFile5
+
+DD//testedDir2:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+DD//testedDir3:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+DD//testedDir4:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+
+DD//testedDir5:
+total 0
+drwxr-xr-x  7 Kevin  staff  238 Jan 15 20:53 [34mtestedDir6[39;49m[0m
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff    0 Jan 15 20:53 testedFile5
+
+DD//testedDir5/testedDir6:
+total 0
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile1
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile2
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile3
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile4
+-rw-r--r--  1 Kevin  staff  0 Jan 15 20:53 testedFile5
+-----------------------------------------------------------------------
+The total number of directories is:  6
+The total number of files is:  36
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfd.sh DD/[K[K[Kttdir/
+total 0
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir1[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir2[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir3[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir4[39;49m[0m
+drwxr-xr-x  7 Kevin  staff  238 Jan 17 11:04 [34mtestedDir5[39;49m[0m
+
+ttdir//testedDir1:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+ttdir//testedDir2:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+ttdir//testedDir3:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+ttdir//testedDir4:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+
+ttdir//testedDir5:
+total 40
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile1
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile2
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile3
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile4
+-rw-r--r--  1 Kevin  staff  49 Jan 17 11:04 testedFile5
+-----------------------------------------------------------------------
+The total number of directories is:  5
+The total number of files is:  25
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh 
+Please refer to the usage:
+usage: ./listfs.sh <directory_name> <n bytes>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh jj kk ll
+Please refer to the usage:
+usage: ./listfs.sh <directory_name> <n bytes>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh jj kk ll[K[K[K[K[K[K[K[Ktest.sh 
+Please refer to the usage:
+usage: ./listfs.sh <directory_name> <n bytes>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh test.sh 10
+You input a file name but not a directory, pls reinput and try again!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh test.sh 10[1P 10[1P 10[1P 10[1P 10[1P 10[1P 10[1P 10s 10d 10f 10[C 10[C[C[C
+The directory doesn't exist, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh sdf  10[C[1P[1P[1P[1@d[1@d[1P[1P[1@t[1@t[1@d[3@ir/[C[C[C[C[K[K-10
+The n must be an integer and equal to or greater than ZERO, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh ttdir/  -10[K[K30
+The n must be an integer and equal to or greater than ZERO, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh ttdir/  -30[K[K[K[K[K[K[K[K[K[K[K. 10
+./DD/test1
+./DD/test2
+./DD/test3
+./DD/testedDir1/testedFile1
+./DD/testedDir1/testedFile2
+./DD/testedDir1/testedFile3
+./DD/testedDir1/testedFile4
+./DD/testedDir1/testedFile5
+./DD/testedDir2/testedFile1
+./DD/testedDir2/testedFile2
+./DD/testedDir2/testedFile3
+./DD/testedDir2/testedFile4
+./DD/testedDir2/testedFile5
+./DD/testedDir3/testedFile1
+./DD/testedDir3/testedFile2
+./DD/testedDir3/testedFile3
+./DD/testedDir3/testedFile4
+./DD/testedDir3/testedFile5
+./DD/testedDir4/testedFile1
+./DD/testedDir4/testedFile2
+./DD/testedDir4/testedFile3
+./DD/testedDir4/testedFile4
+./DD/testedDir4/testedFile5
+./DD/testedDir5/testedDir6/testedFile1
+./DD/testedDir5/testedDir6/testedFile2
+./DD/testedDir5/testedDir6/testedFile3
+./DD/testedDir5/testedDir6/testedFile4
+./DD/testedDir5/testedDir6/testedFile5
+./DD/testedDir5/testedFile1
+./DD/testedDir5/testedFile2
+./DD/testedDir5/testedFile3
+./DD/testedDir5/testedFile4
+./DD/testedDir5/testedFile5
+-----------------------------------------------------------------------
+The total number of files that are smaller than 10 bytes is:  33
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh . 1000
+./createTestFiles.sh
+./DD/test1
+./DD/test2
+./DD/test3
+./DD/testedDir1/testedFile1
+./DD/testedDir1/testedFile2
+./DD/testedDir1/testedFile3
+./DD/testedDir1/testedFile4
+./DD/testedDir1/testedFile5
+./DD/testedDir2/testedFile1
+./DD/testedDir2/testedFile2
+./DD/testedDir2/testedFile3
+./DD/testedDir2/testedFile4
+./DD/testedDir2/testedFile5
+./DD/testedDir3/testedFile1
+./DD/testedDir3/testedFile2
+./DD/testedDir3/testedFile3
+./DD/testedDir3/testedFile4
+./DD/testedDir3/testedFile5
+./DD/testedDir4/testedFile1
+./DD/testedDir4/testedFile2
+./DD/testedDir4/testedFile3
+./DD/testedDir4/testedFile4
+./DD/testedDir4/testedFile5
+./DD/testedDir5/testedDir6/testedFile1
+./DD/testedDir5/testedDir6/testedFile2
+./DD/testedDir5/testedDir6/testedFile3
+./DD/testedDir5/testedDir6/testedFile4
+./DD/testedDir5/testedDir6/testedFile5
+./DD/testedDir5/testedFile1
+./DD/testedDir5/testedFile2
+./DD/testedDir5/testedFile3
+./DD/testedDir5/testedFile4
+./DD/testedDir5/testedFile5
+./fileHelp
+./ttdir/testedDir1/testedFile1
+./ttdir/testedDir1/testedFile2
+./ttdir/testedDir1/testedFile3
+./ttdir/testedDir1/testedFile4
+./ttdir/testedDir1/testedFile5
+./ttdir/testedDir2/testedFile1
+./ttdir/testedDir2/testedFile2
+./ttdir/testedDir2/testedFile3
+./ttdir/testedDir2/testedFile4
+./ttdir/testedDir2/testedFile5
+./ttdir/testedDir3/testedFile1
+./ttdir/testedDir3/testedFile2
+./ttdir/testedDir3/testedFile3
+./ttdir/testedDir3/testedFile4
+./ttdir/testedDir3/testedFile5
+./ttdir/testedDir4/testedFile1
+./ttdir/testedDir4/testedFile2
+./ttdir/testedDir4/testedFile3
+./ttdir/testedDir4/testedFile4
+./ttdir/testedDir4/testedFile5
+./ttdir/testedDir5/testedFile1
+./ttdir/testedDir5/testedFile2
+./ttdir/testedDir5/testedFile3
+./ttdir/testedDir5/testedFile4
+./ttdir/testedDir5/testedFile5
+-----------------------------------------------------------------------
+The total number of files that are smaller than 1000 bytes is:  60
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh . 1000[K[K[K[K[K[K/[KDD/ 10
+DD//test1
+DD//test2
+DD//test3
+DD//testedDir1/testedFile1
+DD//testedDir1/testedFile2
+DD//testedDir1/testedFile3
+DD//testedDir1/testedFile4
+DD//testedDir1/testedFile5
+DD//testedDir2/testedFile1
+DD//testedDir2/testedFile2
+DD//testedDir2/testedFile3
+DD//testedDir2/testedFile4
+DD//testedDir2/testedFile5
+DD//testedDir3/testedFile1
+DD//testedDir3/testedFile2
+DD//testedDir3/testedFile3
+DD//testedDir3/testedFile4
+DD//testedDir3/testedFile5
+DD//testedDir4/testedFile1
+DD//testedDir4/testedFile2
+DD//testedDir4/testedFile3
+DD//testedDir4/testedFile4
+DD//testedDir4/testedFile5
+DD//testedDir5/testedDir6/testedFile1
+DD//testedDir5/testedDir6/testedFile2
+DD//testedDir5/testedDir6/testedFile3
+DD//testedDir5/testedDir6/testedFile4
+DD//testedDir5/testedDir6/testedFile5
+DD//testedDir5/testedFile1
+DD//testedDir5/testedFile2
+DD//testedDir5/testedFile3
+DD//testedDir5/testedFile4
+DD//testedDir5/testedFile5
+-----------------------------------------------------------------------
+The total number of files that are smaller than 10 bytes is:  33
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh DD/ 1000
+DD//test1
+DD//test2
+DD//test3
+DD//testedDir1/testedFile1
+DD//testedDir1/testedFile2
+DD//testedDir1/testedFile3
+DD//testedDir1/testedFile4
+DD//testedDir1/testedFile5
+DD//testedDir2/testedFile1
+DD//testedDir2/testedFile2
+DD//testedDir2/testedFile3
+DD//testedDir2/testedFile4
+DD//testedDir2/testedFile5
+DD//testedDir3/testedFile1
+DD//testedDir3/testedFile2
+DD//testedDir3/testedFile3
+DD//testedDir3/testedFile4
+DD//testedDir3/testedFile5
+DD//testedDir4/testedFile1
+DD//testedDir4/testedFile2
+DD//testedDir4/testedFile3
+DD//testedDir4/testedFile4
+DD//testedDir4/testedFile5
+DD//testedDir5/testedDir6/testedFile1
+DD//testedDir5/testedDir6/testedFile2
+DD//testedDir5/testedDir6/testedFile3
+DD//testedDir5/testedDir6/testedFile4
+DD//testedDir5/testedDir6/testedFile5
+DD//testedDir5/testedFile1
+DD//testedDir5/testedFile2
+DD//testedDir5/testedFile3
+DD//testedDir5/testedFile4
+DD//testedDir5/testedFile5
+-----------------------------------------------------------------------
+The total number of files that are smaller than 1000 bytes is:  33
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh DD/ 1000[K[K[K[K0
+-----------------------------------------------------------------------
+The total number of files that are smaller than 0 bytes is:  0
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./listfs.sh DD/ 0
+-----------------------------------------------------------------------
+The total number of files that are smaller than 0 bytes is:  0
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh 
+Please refer to the usage:
+usage: ./replaceWord.sh <inFile> <word> <repWord> <outFile>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh jj kk ll[K[K[K
+Please refer to the usage:
+usage: ./replaceWord.sh <inFile> <word> <repWord> <outFile>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh jj kk ll
+Please refer to the usage:
+usage: ./replaceWord.sh <inFile> <word> <repWord> <outFile>
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh jj kk ll[K[K[K[K[K[K[K[Kdd[K[KDD/ echo print newtest.[K[K[K[K[Kfile.txt
+You input a directory but not a file, pls reinput and try again!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh DD/ echo print newfile.txt[1P[1P[1@t[1@t[1@d[1@i[1@r[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+You input a directory but not a file, pls reinput and try again!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh ttdir/ echo print newfile.txt[1P[1P[1P[1P[1P[1P[1@t[1@e[1@s[4@t.sh[1P[1P[1P[1P[1@a[1@b[1@c[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+The file is not text file or doesn't exist, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh abc.sh echo print newfile.txt[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+The file is not text file or doesn't exist, pls input a new one!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh abc.sh echo print newfile.txt[1P[1P[1P[1P[1P[1P[C[C[1@.[1@.[1@/
+.DS_Store                   Assignment/                 Lecture1.pdf                
+60-656_outlineW2017_v1.pdf  Lecture1-2.pdf              Lecture2a.pdf               
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh ../ echo print newfile.txt[1@L[6@ecture[1@1[1@-[5@2.pdf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[K[K[K[K[K[Ktest.sh
+The file you input is not a text file, pls reinput and try again!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh ../Lecture1-2.pdf echo print newtest.sh
+The file you input is not a text file, pls reinput and try again!
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ./replaceWord.sh ../Lecture1-2.pdf echo print newtest.sh[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1@t[1@e[5@st.sh[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+    print print"-------------------------------------------------------------------" 
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+-----------------------------------------------------------------------
+The number of words that have been replaced is: 15
+The new file with replaced words:
+/Users/Kevin/Documents/AS_Programming/Assignment/newtest.sh
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ll [K[Ks -l /Users/Kevin/Documents/AS_Programming/Assignment/newtest.sh
+-rw-r--r--  1 Kevin  staff  1041 Jan 24 21:55 /Users/Kevin/Documents/AS_Programming/Assignment/newtest.sh
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m ls -l /Users/Kevin/Documents/AS_Programming/Assignment/newtest.sh
+-rw-r--r--  1 Kevin  staff  1041 Jan 24 21:55 /Users/Kevin/Documents/AS_Programming/Assignment/newtest.sh
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m date
+Tue Jan 24 21:55:51 EST 2017
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat newtest.sh 
+
+    print print"-------------------------------------------------------------------" 
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+    print print"-------------------------------------------------------------------"
+    print print"The total number of directories is: " ${dCount}
+    print print"The total number of files is: " ${fCount}
+
+
+
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m cat test.sh 
+
+    echo echo"-------------------------------------------------------------------" 
+    echo echo"The total number of directories is: " ${dCount}
+    echo echo"The total number of files is: " ${fCount}
+    echo echo"-------------------------------------------------------------------"
+    echo echo"The total number of directories is: " ${dCount}
+    echo echo"The total number of files is: " ${fCount}
+
+    echo echo"-------------------------------------------------------------------"
+    echo echo"The total number of directories is: " ${dCount}
+    echo echo"The total number of files is: " ${fCount}
+    echo echo"-------------------------------------------------------------------"
+    echo echo"The total number of directories is: " ${dCount}
+    echo echo"The total number of files is: " ${fCount}
+    echo echo"-------------------------------------------------------------------"
+    echo echo"The total number of directories is: " ${dCount}
+    echo echo"The total number of files is: " ${fCount}
+
+
+
+[01;33mKevin@Kevins-MacBook-Air-2[01;31m Assignment$[00m exit
+exit
+
+Script done on Tue Jan 24 21:56:34 2017

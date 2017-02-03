@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="./src/Chart.bundle.js"></script>
+<title>Monitoring System Performence</title>
+</head>
+<body>
+<h1 align="center">System Realtime Performence</h1>
+
+<table width="750" height="518" border="0" align="center" cellpadding="8" cellspacing="8">
+  <tbody>
+    <tr valign="bottom">
+      <td align="center">System average workload for 1,5,15 minutes</td>
+      <td align="center">CPU usage in different part</td>
+    </tr>
+    <tr>
+      <td width="184" align="center" valign="middle">
+                <div style="overflow: auto" >  
+                  <div style="width:300px; height:300px;">
+                     <canvas id="myChart1" ></canvas>
+                     <script type="text/javascript">
+                      var ctx1 = document.getElementById("myChart1");
+                      var myChart1 = new Chart(ctx1, {
+                          type: 'bar',
+                          data: {
+                                      labels: ["1 minute", "5 minutes", "15 minutes"],
+                                      datasets: [{
+                                      label: '#Average workload',
+                                      data: [12, 19, 3],
+                                      backgroundColor: [
+                                          'rgba(255, 99, 132, 0.2)',
+                                          'rgba(54, 162, 235, 0.2)',
+                                          'rgba(255, 206, 86, 0.2)',
+                                      ],
+                                      borderColor: [
+                                          'rgba(255,99,132,1)',
+                                          'rgba(54, 162, 235, 1)',
+                                          'rgba(255, 206, 86, 1)'                                      				],
+                                      borderWidth: 1
+                                      }]
+                                 },
+                              options: {
+                                          scales: {
+                                                  yAxes: [{
+                                                  ticks: {
+                                                              beginAtZero:true,
+															  max: 30,
+                    										  min: 0,
+                    										  stepSize: 5
+                                                          }
+                                                          }]
+                  
+                  
+                                                  }
+                                          
+                                      }
+                      });
+                      </script>
+                  
+                  </div>
+                  </div>			
+
+      
+      </td>
+      <td width="168" align="center" valign="middle">
+          <!-- using css(style) to resize divs that contain charts
+                 -->
+                <div style="overflow: auto" >  
+                <div style="width:280px; height:280px;">
+                
+                   <canvas id="myChart3" ></canvas>
+                   <script type="text/javascript">
+                    var ctx3 = document.getElementById("myChart3");
+                    var myChart3 = new Chart(ctx3, {
+                        type: 'pie',
+                        data: {
+                                    labels: [
+                                            "Application",
+                                            "System",
+                                            "Network",
+											"Idle",
+											"Wait"
+                                            ],
+                                    datasets: [
+                                            {
+                                      label: '#CPU usage in different part',
+      											data: [300, 50, 100, 70, 90],
+                                                backgroundColor: [
+                                                    "#FF6384",
+                                                    "#36A2EB",
+                                                    "#FFCE56",
+													"#FFAB84",
+                                                    "#3610EB"
+													
+                                                ],
+                                                hoverBackgroundColor: [
+                                                    "#FF6384",
+                                                    "#36A2EB",
+                                                    "#FFCE56",
+													"#FFAB84",
+                                                    "#3610EB"
+													
+													
+                                                ]
+                                            }]
+                
+                               },
+                                
+                
+                
+                
+                
+                    });
+                
+                   </script>
+                
+                </div></div>
+
+         
+      </td>
+    </tr>
+    <tr valign="bottom">
+      <td align="center">Memory usage</td>
+      <td align="center">Storage Usage</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+      
+            <!-- using css(style) to resize divs that contain charts
+                 -->
+                <div style="overflow: auto" >  
+                <div style="width:280px; height:280px;">
+                
+                   <canvas id="myChart2" ></canvas>
+                   <script type="text/javascript">
+                    var ctx2 = document.getElementById("myChart2");
+                    var myChart2 = new Chart(ctx2, {
+                        type: 'pie',
+                        data: {
+                                    labels: [
+                                            "Physical Free",
+                                            "Cache Free",
+                                            "Used Memory"
+                                            ],
+                                    datasets: [
+                                            {
+                                      label: '#Memory usage',
+      											data: [300, 50, 100],
+                                                backgroundColor: [
+                                                    "#FF6384",
+                                                    "#36A2EB",
+                                                    "#FFCE56",
+                                                ],
+                                                hoverBackgroundColor: [
+                                                    "#FF6384",
+                                                    "#36A2EB",
+                                                    "#FFCE56"
+                                                ]
+                                            }]
+                
+                               },
+                                
+                
+                
+                
+                
+                    });
+                
+                   </script>
+                
+                </div></div>
+
+      
+      
+      
+      
+
+      
+      </td>
+      <td align="center" valign="middle">
+
+          <!-- using css(style) to resize divs that contain charts
+                 -->
+                <div style="overflow: auto" >  
+                <div style="width:280px; height:280px;">
+                
+                   <canvas id="myChart4" ></canvas>
+                   <script type="text/javascript">
+                    var ctx4 = document.getElementById("myChart4");
+                    var myChart4 = new Chart(ctx4, {
+                        type: 'pie',
+                        data: {
+                                    labels: [
+                                            "Disk used",
+                                            "Disk free"
+                                            ],
+                                    datasets: [
+                                            {
+                                      label: '#Storage Usage',
+      											data: [300, 50],
+                                                backgroundColor: [
+                                                    "#FF6384",
+                                                    "#36A2EB"
+													
+                                                ],
+                                                hoverBackgroundColor: [
+                                                    "#FF6384",
+                                                    "#36A2EB"
+                                                ]
+                                            }]
+                
+                               },
+                                
+                
+                
+                
+                
+                    });
+                
+                   </script>
+                
+                </div></div>
+      
+      
+      
+      
+      
+      
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">&nbsp;</td>
+      <td align="center" valign="middle">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</body>
+</html>
